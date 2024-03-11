@@ -91,6 +91,7 @@ type SubscriptionItem = {
     off<TName extends keyof T>(name: TName, cb: (arg: T[TName]) => unknown): void;
     off<TName extends keyof T>(name?: TName, cb?: (arg: T[TName]) => unknown): void {
       if (typeof name === 'undefined') {
+        this.eventHandlersMap.forEach(list => list.clear());
         this.eventHandlersMap.clear();
         return;
       }
@@ -106,11 +107,6 @@ type SubscriptionItem = {
           handlers.delete(item);
         }
       });
-    }
-  
-    dispose() {
-      this.eventHandlersMap.forEach(list => list.clear());
-      this.eventHandlersMap.clear();
     }
   
     private subscribe<TName extends keyof T>(
